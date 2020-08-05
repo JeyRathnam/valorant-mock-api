@@ -1,22 +1,7 @@
-import { MatchDto, MatchInfoDto } from './model/matchInterface';
+import { MatchDto, MatchInfoDto, PlayerLocationsDto } from './model/matchInterface';
+import { Base, Location } from './model/atomicMatch';
+import { generateRandomBoolean, generateRandomNumber, generateRandomString, gameLenghtMinMax } from './../utils/utils';
 
-let mapId : number[] = [1, 2, 3, 4];
-let gameLenghtMinMax = {min : 1800000, max : 2300000};
-let generateRandomString = () :string => {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-}
-
-let generateRandomNumber = (min : number, max : number) : number => {
-    return Math.floor(Math.random() * (min - max) + min);
-}
-
-let generateRandomBoolean = () => {
-    return !Math.round(Math.random());
-}
-
-interface Base {
-    generate() : any;
-}
 
 export class MatchProvider implements Base {  
     matchId : string;
@@ -52,3 +37,21 @@ class MatchInfo implements Base {
         return [a];
     }
 }
+
+
+class PlayerLocations implements Base {
+    puuid : string;
+    constructor(puuid : string) {
+        this.puuid = puuid;
+        
+    }
+    
+    generate() : PlayerLocationsDto {
+        let playerLocations = {} as PlayerLocationsDto;
+        playerLocations.puuid = this.puuid;
+        playerLocations.location = (new Location()).generate();
+        playerLocations.viewRadians = generateRandomNumber(0, 200);
+        return playerLocations;
+    }
+}
+
